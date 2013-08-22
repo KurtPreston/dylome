@@ -12,8 +12,6 @@
     <tr>
       <th>Name</th>
       <th>Length</th>
-      <th>BPM</th>
-      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -23,10 +21,8 @@
     <% @songs.each do |song| %>
       <tr>
         <td><%= song.name %></td>
-        <td><%= song.length %></td>
-        <td><%= song.bpm %></td>
-        <td><%= link_to 'Show', song %></td>
-        <td><%= link_to 'Edit', edit_song_path(song) %></td>
+        <td><%= song.formatted_duration %></td>
+        <td><%= link_to 'Listen', song %></td>
         <td><%= link_to 'Destroy', song, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

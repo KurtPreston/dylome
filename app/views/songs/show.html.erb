@@ -6,11 +6,11 @@
 </p>
 
 <p>
-  <strong>Length:</strong>
-  <%= @song.length %>
+  <strong>Duration:</strong>
+  <%= @song.formatted_duration %>
 </p>
 
-<p>
-  <strong>File:</strong>
-  <%= @song.uploaded_file_file_name %>
-</p>
+<audio controls>
+  <source src="<%= @song.uploaded_file.url %>" type="audio/mpeg">
+  Your browser does not support this audio format.
+</audio>
