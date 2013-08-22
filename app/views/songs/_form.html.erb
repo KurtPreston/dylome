@@ -12,14 +12,14 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.label :name, "What's the name of the song?" %><br>
+    <%= f.text_field :name, placeholder: 'Title' %>
   </div>
   <div class="field">
-    <%= f.label :uploaded_file %><br>
+    <%= f.label :uploaded_file, "Select an MP3" %><br>
     <%= f.file_field :uploaded_file %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Upload", class: 'btn btn-primary' %>
   </div>
 <% end %>

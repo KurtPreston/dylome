@@ -12,9 +12,14 @@
  *= require_tree .
  */
 
-@import "twitter/bootstrap";
+@import 'twitter/bootstrap';
+@import 'compass';
 
 .center { text-align: center; }
+
+.field {
+  margin-bottom: 15px;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */
