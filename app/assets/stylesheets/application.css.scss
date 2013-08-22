@@ -27,15 +27,15 @@
   }
 }
 
+a:hover {
+  text-decoration: none;
+}
 
-/* Sticky footer styles
--------------------------------------------------- */
 
 html,
 body {
-  height: 100%;
-
   /* The html and body elements cannot have any padding or margin. */
+  height: 100%;
 }
 
 /* Wrapper for page content to push down footer */
@@ -60,11 +60,6 @@ body {
 
   }
 }
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
 .container {
   width: auto;
