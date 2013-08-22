@@ -75,7 +75,7 @@ do
   if float_cond $cond2; then
     dispsec="0$dispsec"
   fi
-  .$SCRIPTPATH/ffmpeg -i $SCRIPTPATH/inputfile.mp3 -vcodec copy -acodec copy -ss 00:$displyMinutes:$dispsec -t 00:00:0$chunk $SCRIPTPATH/tempdylome/$finame.mp3
+  ffmpeg -i $SCRIPTPATH/inputfile.mp3 -vcodec copy -acodec copy -ss 00:$displyMinutes:$dispsec -t 00:00:0$chunk $SCRIPTPATH/tempdylome/$finame.mp3
 
 
   a=$(du -sk $SCRIPTPATH/tempdylome/$finame.mp3 |cut -f 1)
