@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '>= 4'
-gem 'protected_attributes'
 gem 'sqlite3'
 gem 'turbolinks'
 gem 'paperclip'
