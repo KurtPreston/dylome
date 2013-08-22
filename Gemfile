@@ -5,6 +5,7 @@ gem 'protected_attributes'
 gem 'sqlite3'
 gem 'turbolinks'
 gem 'paperclip'
+gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'

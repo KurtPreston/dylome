@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Dylome</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+  <head>
+    <title>Dylome</title>
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
 
-<%= yield %>
 
-</body>
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Begin page content -->
+      <div class="container">
+        <h1 class='center'>Dylome</h1>
+        <br/>
+        <%= yield %>
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <div class='navbar'>
+          <p class="navbar-brand" href="#">Dylome</p>
+          <p class="navbar-text text-muted">Created by <%= link_to 'Kurt Preston', 'http://www.kurtpreston.com' %> and <%= link_to 'Dubi Kaufman', 'http://www.dubster.com/' %></p>
+
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
