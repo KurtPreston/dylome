@@ -3,7 +3,7 @@
 <br/>
 
 <p class='center'>
-  <%= link_to 'Upload a song', new_song_path, class: 'btn btn-primary' %>
+  <%= link_to '<i class="icon-cloud-upload"></i> Upload a song'.html_safe, new_song_path, class: 'btn btn-primary' %>
 </p>
 
 <br/>
@@ -11,34 +11,43 @@
 <br/>
 
 <h2 class='center'>Recently-uploaded songs</h2>
-<table class='table'>
+<table class='table centered'>
   <tbody>
     <% @songs.each do |song| %>
       <tr>
         <td>
           <strong><%= song.name %></strong><br/>
-          <small>
+          <small class='details'>
             <%= song.formatted_duration %><br/>
             <%= song.bpm %> BPM
           </small>
         </td>
         <td>
-          <div>
-            <audio controls>
-              <source src="<%= song.uploaded_file.url %>" type="audio/mpeg">
-              Your browser does not support this audio format.
-            </audio>
-            <div class='caption'>original</div>
-          </div>
-          <% if song.processed_file_file_name %>
-            <div>
+          <div class='song-wrapper'>
+            <div class='song'>
               <audio controls>
-                <source src="<%= song.processed_file.url %>" type="audio/mpeg">
+                <source src="<%= song.uploaded_file.url %>" type="audio/mpeg">
                 Your browser does not support this audio format.
               </audio>
-              <div class='caption'>dylomified</div>
+              <div class='caption'>
+                original
+                <%= link_to "<i class='icon-download-alt'></i>".html_safe, song.uploaded_file.url, target: '_blank' %>
+              </div>
             </div>
-          <% end %>
+            <% if song.processed_file_file_name %>
+              <br/>
+              <div class='song'>
+                <audio controls>
+                  <source src="<%= song.processed_file.url %>" type="audio/mpeg">
+                  Your browser does not support this audio format.
+                </audio>
+                <div class='caption'>
+                  dylomified
+                  <%= link_to "<i class='icon-download-alt'></i>".html_safe, song.processed_file.url, target: '_blank' %>
+                </div>
+              </div>
+            <% end %>
+          </div>
         </td>
       </tr>
     <% end %>
