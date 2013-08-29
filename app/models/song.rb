@@ -7,8 +7,8 @@ class Song < ActiveRecord::Base
   validates_presence_of :name, :bpm
   validates_numericality_of :bpm, greater_than_or_equal_to: 50, less_than_or_equal_to: 200
 
-  after_create :calculate_song_length
-  after_create :dylomify
+  before_create :calculate_song_length
+  before_create :dylomify
 
   def filename_without_extension
     if uploaded_file_file_name.present?
@@ -20,15 +20,20 @@ class Song < ActiveRecord::Base
     length.duration(false)
   end
 
+  def song_id
+    @song_id ||= (id.present? ? id : (0...8).map{(65+rand(26)).chr}.join)
+  end
+
   def uploaded_file_copy
     unless @uploaded_file_copy && File.exists?(@uploaded_file_copy)
       original_file = if uploaded_file.queued_for_write.any?
                         uploaded_file.queued_for_write[:original].path
                       else
+                        raise "No file"
                         uploaded_file.path
                       end
 
-      @uploaded_file_copy = tmp_dir.join("#{id}.mp3").to_s
+      @uploaded_file_copy = tmp_dir.join("#{song_id}.mp3").to_s
       FileUtils.rm @uploaded_file_copy if File.exists?(@uploaded_file_copy)
       FileUtils.copy(original_file, @uploaded_file_copy)
 
@@ -53,7 +58,7 @@ class Song < ActiveRecord::Base
       hours = duration_string[1].to_i
       minutes = duration_string[2].to_i
       seconds = duration_string[3].to_i
-      update_attribute(:length, hours * 3600 + minutes * 60 + seconds)
+      self.length = hours * 3600 + minutes * 60 + seconds
     ensure
       FileUtils.rm input_file if input_file && File.exists?(input_file)
     end
@@ -61,13 +66,13 @@ class Song < ActiveRecord::Base
 
   def dylomify(offset = 0)
     input_file = uploaded_file_copy
-    output_files = [input_file]
+    output_files = []
 
     begin
       (offset.to_f..length).step(chunk_duration).each_with_index do |start_time, chunk_num|
         end_time = start_time + chunk_duration
 
-        output_file = tmp_dir.join("#{id}-#{chunk_num}.mp3")
+        output_file = tmp_dir.join("#{song_id}-#{chunk_num}.mp3")
         output_files << output_file
 
         # Create chunk
@@ -78,10 +83,12 @@ class Song < ActiveRecord::Base
       end
 
       # Write the file list
-      file_list = tmp_dir.join("#{id}-filelist.txt")
+      file_list = tmp_dir.join("#{song_id}-filelist.txt")
       file_list_contents = output_files.reverse.map {|f| "file '#{f}'"}.join("\n")
       File.open(file_list, 'w') { |file| file.write(file_list_contents) }
+
       output_files << file_list
+      output_files << input_file
 
       # Combine chunks
       dylomified_file = tmp_dir.join("#{uploaded_file_file_name}-dylome.mp3")
@@ -92,7 +99,7 @@ class Song < ActiveRecord::Base
       output_files << dylomified_file
 
       # Upload processed file
-      update_attribute(:processed_file, File.new(dylomified_file))
+      self.processed_file = File.new(dylomified_file)
     ensure
       FileUtils.rm output_files
     end
