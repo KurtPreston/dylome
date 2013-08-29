@@ -7,6 +7,13 @@
     <%= f.text_field :name, placeholder: 'Title' %>
   </div>
   <div class="field">
+    <%= f.label :bpm, "What's the BPM?" %><br>
+    <% if @song.errors[:bpm].any? %>
+      <div class='form-error'>Please enter BPM between 50 and 200</div>
+    <% end %>
+    <%= f.text_field :bpm, placeholder: '120' %>
+  </div>
+  <div class="field">
     <%= f.label :uploaded_file, "Select an MP3" %><br>
     <% if @song.errors[:uploaded_file].any? %>
       <div class='form-error'>Please select an MP3</div>

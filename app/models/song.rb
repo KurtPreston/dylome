@@ -1,13 +1,14 @@
 class Song < ActiveRecord::Base
   has_attached_file :uploaded_file
-  validates_attachment :uploaded_file,  presence: true
+  validates_attachment :uploaded_file, presence: true, size: {in: 0..20.megabytes}
 
   has_attached_file :processed_file
 
-  validates_presence_of :name
+  validates_presence_of :name, :bpm
+  validates_numericality_of :bpm, greater_than_or_equal_to: 50, less_than_or_equal_to: 200
 
-  after_create :calculate_song_length
-  after_create :dylomify
+  before_create :calculate_song_length
+  before_create :dylomify
 
   def filename_without_extension
     if uploaded_file_file_name.present?
