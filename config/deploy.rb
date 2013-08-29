@@ -9,7 +9,7 @@ set :ssh_options, { :forward_agent => true }
 
 server "tefnut", :app, :web, :db, :primary => true
 
-before 'deploy:assets:precompile', 'deploy:symlink_db'
+before 'deploy:assets:precompile', 'deploy:symlink_config'
 after "deploy:restart", "deploy:cleanup"
 
 # If you are using Passenger mod_rails uncomment this:
@@ -23,7 +23,8 @@ namespace :deploy do
   end
 
   desc "Symlinks the database.yml"
-  task :symlink_db, :roles => :app do
+  task :symlink_config, :roles => :app do
     run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{deploy_to}/shared/config/paperclip.yml #{release_path}/config/paperclip.yml"
   end
 end

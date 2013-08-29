@@ -25,7 +25,7 @@
         <td>
           <div class='song-wrapper'>
             <div class='song'>
-              <audio controls>
+              <audio controls preload='none'>
                 <source src="<%= song.uploaded_file.url %>" type="audio/mpeg">
                 Your browser does not support this audio format.
               </audio>
@@ -37,7 +37,7 @@
             <% if song.processed_file_file_name %>
               <br/>
               <div class='song'>
-                <audio controls>
+                <audio controls preload='none'>
                   <source src="<%= song.processed_file.url %>" type="audio/mpeg">
                   Your browser does not support this audio format.
                 </audio>
