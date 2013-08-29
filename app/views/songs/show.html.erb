@@ -7,6 +7,11 @@
   <%= @song.formatted_duration %>
 </p>
 
+<p>
+  <strong>BPM:</strong>
+  <%= @song.bpm %>
+</p>
+
 <h2>Original Song</h2>
 <audio controls>
   <source src="<%= @song.uploaded_file.url %>" type="audio/mpeg">

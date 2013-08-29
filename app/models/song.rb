@@ -7,8 +7,8 @@ class Song < ActiveRecord::Base
   validates_presence_of :name, :bpm
   validates_numericality_of :bpm, greater_than_or_equal_to: 50, less_than_or_equal_to: 200
 
-  before_create :calculate_song_length
-  before_create :dylomify
+  after_create :calculate_song_length
+  after_create :dylomify
 
   def filename_without_extension
     if uploaded_file_file_name.present?
@@ -21,38 +21,47 @@ class Song < ActiveRecord::Base
   end
 
   def uploaded_file_copy
-    @uploaded_file_copy ||= uploaded_file.path
+    unless @uploaded_file_copy && File.exists?(@uploaded_file_copy)
+      original_file = if uploaded_file.queued_for_write.any?
+                        uploaded_file.queued_for_write[:original].path
+                      else
+                        uploaded_file.path
+                      end
 
-    raise "File not copied" if !File.exists?(@uploaded_file_copy)
+      @uploaded_file_copy = tmp_dir.join("#{id}.mp3").to_s
+      FileUtils.rm @uploaded_file_copy if File.exists?(@uploaded_file_copy)
+      FileUtils.copy(original_file, @uploaded_file_copy)
 
+      @uploaded_file_copy
+    end
+
+    raise "File not copied" if (@uploaded_file_copy.nil? || !File.exists?(@uploaded_file_copy))
     @uploaded_file_copy
   end
 
   def calculate_song_length
-    input_file = uploaded_file_copy
+    begin
+      input_file = uploaded_file_copy
 
-    # Get song length
-    song_length_command = IO.popen ["ffmpeg", "-i", input_file, :err=>[:child, :out]] #we care about standard error
-    result = song_length_command.read
-    song_length_command.close
+      # Get song length
+      song_length_command = IO.popen ["ffmpeg", "-i", input_file, :err=>[:child, :out]] #we care about standard error
+      result = song_length_command.read
+      song_length_command.close
 
-    # Update song length
-    puts result
-    duration_string = result.match("Duration: ([0-9]+):([0-9]+):([0-9]+).([0-9]+)")
-    hours = duration_string[1].to_i
-    minutes = duration_string[2].to_i
-    seconds = duration_string[3].to_i
-    update_attribute(:length, hours * 3600 + minutes * 60 + seconds)
-  ensure
-    FileUtils.rm input_file if File.exists?(input_file)
+      # Update song length
+      duration_string = result.match("Duration: ([0-9]+):([0-9]+):([0-9]+).([0-9]+)")
+      hours = duration_string[1].to_i
+      minutes = duration_string[2].to_i
+      seconds = duration_string[3].to_i
+      update_attribute(:length, hours * 3600 + minutes * 60 + seconds)
+    ensure
+      FileUtils.rm input_file if input_file && File.exists?(input_file)
+    end
   end
 
   def dylomify(offset = 0)
     output_files = []
     begin
-      tmp_dir = Rails.root.join('tmp', 'dylome')
-      Dir::mkdir(tmp_dir) unless File.exists?(tmp_dir)
-
       (offset.to_f..length).step(chunk_duration).each_with_index do |start_time, chunk_num|
         end_time = start_time + chunk_duration
 
@@ -89,5 +98,11 @@ class Song < ActiveRecord::Base
 
   def chunk_duration(num_beats = 4)
     60.to_f / bpm * num_beats
+  end
+
+  def tmp_dir
+    tmp_dir = Rails.root.join('tmp', 'dylome')
+    Dir::mkdir(tmp_dir) unless File.exists?(tmp_dir)
+    tmp_dir
   end
 end
