@@ -15,4 +15,7 @@
 /log/*.log
 /tmp
 /public/system
+
+# Ignore secure files
 /config/database.yml
+/config/paperclip.yml

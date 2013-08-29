@@ -6,6 +6,7 @@ gem 'paperclip'
 gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails'
 gem 'capistrano'
 gem 'execjs', '1.4'
+gem 'aws-sdk'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
