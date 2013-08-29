@@ -60,7 +60,9 @@ class Song < ActiveRecord::Base
   end
 
   def dylomify(offset = 0)
-    output_files = []
+    input_file = uploaded_file_copy
+    output_files = [input_file]
+
     begin
       (offset.to_f..length).step(chunk_duration).each_with_index do |start_time, chunk_num|
         end_time = start_time + chunk_duration
@@ -69,7 +71,7 @@ class Song < ActiveRecord::Base
         output_files << output_file
 
         # Create chunk
-        chunk_command = %W(ffmpeg -i #{uploaded_file_copy} -vcodec copy -acodec copy -ss #{start_time.duration} -t #{chunk_duration.duration} #{output_file})
+        chunk_command = %W(ffmpeg -i #{input_file} -vcodec copy -acodec copy -ss #{start_time.duration} -t #{chunk_duration.duration} #{output_file})
         chunk_command = IO.popen chunk_command
         chunk_command.read
         chunk_command.close
