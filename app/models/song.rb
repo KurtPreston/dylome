@@ -77,6 +77,10 @@ class Song < ActiveRecord::Base
       concat_command = IO.popen concat_command
       concat_command.read
       concat_command.close
+      output_files << dylomified_file
+
+      # Upload processed file
+      update_attribute(:processed_file, File.new(dylomified_file))
     ensure
       FileUtils.rm output_files
     end

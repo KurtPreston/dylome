@@ -1,16 +1,22 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @song.name %>
-</p>
+<h1><%= @song.name %></h1>
 
 <p>
   <strong>Duration:</strong>
   <%= @song.formatted_duration %>
 </p>
 
+<h2>Original Song</h2>
 <audio controls>
   <source src="<%= @song.uploaded_file.url %>" type="audio/mpeg">
   Your browser does not support this audio format.
 </audio>
+
+<h2>Dylomified Song</h2>
+<% if @song.processed_file_file_name %>
+  <audio controls>
+    <source src="<%= @song.processed_file.url %>" type="audio/mpeg">
+    Your browser does not support this audio format.
+  </audio>
+<% end %>
