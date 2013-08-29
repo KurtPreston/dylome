@@ -12,22 +12,34 @@
 
 <h2 class='center'>Recently-uploaded songs</h2>
 <table class='table'>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Length</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
   <tbody>
     <% @songs.each do |song| %>
       <tr>
-        <td><%= song.name %></td>
-        <td><%= song.formatted_duration %></td>
-        <td><%= link_to 'Listen', song %></td>
-        <td><%= link_to 'Destroy', song, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <strong><%= song.name %></strong><br/>
+          <small>
+            <%= song.formatted_duration %><br/>
+            <%= song.bpm %> BPM
+          </small>
+        </td>
+        <td>
+          <div>
+            <audio controls>
+              <source src="<%= song.uploaded_file.url %>" type="audio/mpeg">
+              Your browser does not support this audio format.
+            </audio>
+            <div class='caption'>original</div>
+          </div>
+          <% if song.processed_file_file_name %>
+            <div>
+              <audio controls>
+                <source src="<%= song.processed_file.url %>" type="audio/mpeg">
+                Your browser does not support this audio format.
+              </audio>
+              <div class='caption'>dylomified</div>
+            </div>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

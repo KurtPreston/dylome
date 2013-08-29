@@ -1,4 +1,4 @@
 Dylome::Application.routes.draw do
   root 'songs#index'
-  resources :songs
+  resources :songs, only: [:new, :create, :index, :show]
 end
