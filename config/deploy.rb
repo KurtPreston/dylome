@@ -9,7 +9,7 @@ set :ssh_options, { :forward_agent => true }
 
 server "tefnut", :app, :web, :db, :primary => true
 
-after 'deploy:update_code', 'deploy:symlink_db'
+before 'deploy:assets:precompile', 'deploy:symlink_db'
 after "deploy:restart", "deploy:cleanup"
 
 # If you are using Passenger mod_rails uncomment this:
