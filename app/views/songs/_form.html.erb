@@ -23,4 +23,14 @@
   <div class="actions">
     <%= f.submit "Upload", class: 'btn btn-primary' %>
   </div>
+  <div id="status-message"></div>
 <% end %>
+
+<script type='text/javascript'>
+  $(document).ready(function() {
+    $('#new_song').submit(function() {
+      $('#status-message').text("Your file is being processed.  This may take a few minutes...");
+      $('#new_song input[type="submit"]').attr('disabled', 'disabled');
+    });
+  });
+</script>
