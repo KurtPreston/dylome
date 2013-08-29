@@ -141,7 +141,6 @@ PLATFORMS
 DEPENDENCIES
   anjlab-bootstrap-rails
   capistrano
-  coffee-rails (~> 4.0.0)
   compass-rails!
   jquery-rails
   paperclip
