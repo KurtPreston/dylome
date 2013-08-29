@@ -6,6 +6,7 @@ gem 'turbolinks'
 gem 'paperclip'
 gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails'
 gem 'capistrano'
+gem 'execjs', '1.4'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
