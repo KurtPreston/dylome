@@ -24,3 +24,5 @@ production:
   database: dylome
   host: localhost
   pool: 5
+  username:
+  password:
