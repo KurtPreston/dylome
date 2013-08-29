@@ -5,6 +5,7 @@ gem 'sqlite3'
 gem 'turbolinks'
 gem 'paperclip'
 gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails'
+gem 'capistrano'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
