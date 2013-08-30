@@ -2,7 +2,7 @@
 
 SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 
-function float_eval()
+function float_eval() 
 {
   float_scale=3
   local stat=0
@@ -27,6 +27,8 @@ function float_cond()
   local stat=$((cond == 0))
   return $stat
 }
+
+#deleting temporary files that might exist from previus executions.
 rm -r $SCRIPTPATH/tempdylome
 rm $SCRIPTPATH/outputfile.mp3
 rm $SCRIPTPATH/piecelist.txt
@@ -34,9 +36,9 @@ mkdir $SCRIPTPATH/tempdylome
 
 minutes=0
 mySeconds=0
-chunk=$1
+chunk=$1 
 i=0
-complete=0
+complete=0 #flag for the end of the process
 
 displayChunk=$chunk
 cond2="10.0 > $dispsec "
@@ -44,8 +46,6 @@ if float_cond $cond2; then
   displayChunk="0$displayChunk"
 fi
 
-
-#replaces $3
 while [ $complete -le 1 ]
 
 do
@@ -65,7 +65,7 @@ do
     displyMinutes="0$displyMinutes"
   fi
 
-  # doomsday
+  # fail safe. prevents the script to run forever in case of an error. 
   if [ $i -gt 1000  ]; then
     complete=10
   fi
@@ -77,10 +77,10 @@ do
   fi
   ffmpeg -i $SCRIPTPATH/inputfile.mp3 -vcodec copy -acodec copy -ss 00:$displyMinutes:$dispsec -t 00:00:0$chunk $SCRIPTPATH/tempdylome/$finame.mp3
 
-
+  #checking the file size of the chunk tht was generated. If it is too small we reached the end of the process.
   a=$(du -sk $SCRIPTPATH/tempdylome/$finame.mp3 |cut -f 1)
   if [ 5 -gt $a ]; then
-    complete=10
+    complete=10     
     rm $SCRIPTPATH/tempdylome/$finame.mp3
   fi
 done
@@ -93,6 +93,7 @@ done
 
 ./$SCRIPTPATH/ffmpeg -f concat -i $SCRIPTPATH/piecelist.txt -c copy $SCRIPTPATH/outputfile.mp3
 
+#deletes temporary files.
 rm -r $SCRIPTPATH/tempdylome
 rm $SCRIPTPATH/inputfile.mp3
 rm $SCRIPTPATH/piecelist.txt
