@@ -7,6 +7,7 @@ gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails'
 gem 'capistrano'
 gem 'execjs', '1.4'
 gem 'aws-sdk'
+gem 'pg'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
@@ -14,11 +15,3 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'compass-rails'
 gem 'font-awesome-rails'
-
-group :development, :test do
-  gem 'sqlite3'
-end
-
-group :production do
-  gem 'pg'
-end
