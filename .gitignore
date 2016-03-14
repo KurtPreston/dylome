@@ -16,6 +16,5 @@
 /tmp
 /public/system
 
-# Ignore secure files
-/config/database.yml
-/config/paperclip.yml
+# Ignore private environment variables config
+.env
